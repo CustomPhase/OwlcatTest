@@ -17,6 +17,7 @@ public class CameraController : MonoBehaviour
     [Header("Pan")]
     [SerializeField] private float m_PanSpeed = 10f;
     [SerializeField, Range(0.01f, 1f)] private float m_CameraBlendSmoothing = 0.2f;
+    [SerializeField, Range(1.0f, 5f)] private float m_CameraPanHeightSmoothing = 3;
     private SmoothDampFloat m_FreeCameraBlend;
     private float m_FreeCameraBlendTarget = 0;
     private Vector3 m_CameraTargetPosition;
@@ -96,7 +97,7 @@ public class CameraController : MonoBehaviour
 
     private void SnapFreeCameraTargetPositionToGround()
     {
-        m_FreeCameraTargetPosition.y = CameraUtils.GetSmoothedCameraTargetHeight(m_FreeCameraTargetPosition, m_Target.LayerMask);
+        m_FreeCameraTargetPosition.y = CameraUtils.GetSmoothedCameraTargetHeight(m_FreeCameraTargetPosition, m_Target.LayerMask, m_CameraPanHeightSmoothing);
     }
 
     private void UpdateCameraTargetPosition()

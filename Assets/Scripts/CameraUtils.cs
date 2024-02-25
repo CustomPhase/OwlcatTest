@@ -5,9 +5,8 @@ using UnityEngine.AI;
 
 public static class CameraUtils
 {
-    public static float GetSmoothedCameraTargetHeight(Vector3 cameraTargetPosition, LayerMask layerMask)
+    public static float GetSmoothedCameraTargetHeight(Vector3 cameraTargetPosition, LayerMask layerMask, float gridSize)
     {
-        float gridSize = 2.0f;
         float[,] heights = new float[2, 2];
 
         Vector3 cameraTargetPositionGrid =
