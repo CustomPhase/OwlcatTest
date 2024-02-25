@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private LayerMask m_LayerMask = Physics.AllLayers;
+    public LayerMask LayerMask => m_LayerMask;
     [SerializeField] private InputActionReference m_MoveActionReference;
     
     private NavMeshAgent m_NavMeshAgent;
