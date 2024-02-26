@@ -18,6 +18,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float m_PanSpeed = 10f;
     [SerializeField, Range(0.01f, 1f)] private float m_CameraBlendSmoothing = 0.2f;
     [SerializeField, Range(1.0f, 5f)] private float m_CameraPanHeightSmoothing = 3;
+    [SerializeField] private float m_MaximumAllowedDistanceFromTarget = 40;
     private SmoothDampFloat m_FreeCameraBlend;
     private float m_FreeCameraBlendTarget = 0;
     private Vector3 m_CameraTargetPosition;
@@ -100,6 +101,19 @@ public class CameraController : MonoBehaviour
         m_FreeCameraTargetPosition.y = CameraUtils.GetSmoothedCameraTargetHeight(m_FreeCameraTargetPosition, m_Target.LayerMask, m_CameraPanHeightSmoothing);
     }
 
+    private void LimitFreeCameraDistanceFromTarget()
+    {
+        Vector3 targetPosition = m_Target.transform.position;
+        Vector3 targetRelativePosition = m_FreeCameraTargetPosition - targetPosition;
+        Vector2 targetRelativePositionXZ = new Vector2(targetRelativePosition.x, targetRelativePosition.z);
+        targetRelativePositionXZ = Vector2.ClampMagnitude(targetRelativePositionXZ, m_MaximumAllowedDistanceFromTarget);
+        m_FreeCameraTargetPosition = new Vector3(
+            targetPosition.x + targetRelativePositionXZ.x, 
+            m_FreeCameraTargetPosition.y, 
+            targetPosition.z + targetRelativePositionXZ.y
+        );
+    }
+
     private void UpdateCameraTargetPosition()
     {
         var panValue = m_PanActionReference.action.ReadValue<Vector2>();
@@ -114,6 +128,7 @@ public class CameraController : MonoBehaviour
             m_FreeCameraTargetPosition += 
                 Vector3.ProjectOnPlane(transform.right, Vector3.up).normalized * panValue.x * Time.unscaledDeltaTime +
                 Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized * panValue.y * Time.unscaledDeltaTime;
+            LimitFreeCameraDistanceFromTarget();
             SnapFreeCameraTargetPositionToGround();
         }
         else

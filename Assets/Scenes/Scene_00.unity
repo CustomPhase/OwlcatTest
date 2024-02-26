@@ -1266,6 +1266,7 @@ MonoBehaviour:
   m_PanSpeed: 10
   m_CameraBlendSmoothing: 0.2
   m_CameraPanHeightSmoothing: 3
+  m_MaximumAllowedDistanceFromTarget: 40
   m_ZoomDistanceMin: 2.5
   m_ZoomDistanceMax: 9.9
   m_ZoomSensitivity: 0.08
